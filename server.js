@@ -48,8 +48,8 @@ app.get('/quotes/search', (req, res) => {
 }
  */
 //Start our server so that it listens for HTTP requests!
-let port = 5000;
 
-app.listen(port, function () {
-  console.log('Your app is listening on port ' + port);
-});
+// SERVER
+const port = 5000;
+const url = `http://localhost:${port}/quotes`;
+app.listen(port, () => console.log(`Listening on port ${url}`));
