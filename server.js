@@ -4,10 +4,12 @@ const { response } = require('express');
 
 //load the 'express' module which makes writing webservers easy
 const express = require('express');
+const fs = require('fs');
 const app = express();
-
 //load the quotes JSON
 const quotes = require('./quotes.json');
+const lodash = require('lodash');
+const cors = require('cors');
 
 // Now register handlers for some routes:
 //   /                  - Return some helpful welcome info (text)
@@ -19,18 +21,20 @@ app.get('/', function (request, response) {
 
 //START OF YOUR CODE...
 
-app.get('/quotes', function (request, response) {
-  response.send(quotes);
+app.use(cors());
+
+app.get('/quotes', (req, res) => {
+  res.send(quotes);
 });
 
-app.get('/quotes/random', function (request, response) {
-  response.send(pickFromArray(quotes));
+app.get('/quotes/random', (req, res) => {
+  res.send(lodash.sample(quotes));
 });
 
 app.get('/quotes/search', (req, res) => {
-  const termQuery = req.query.term.toLowerCase()
-  const search = quotes.filter(quote => quote.quote.toLowerCase().includes(termQuery) || quote.author.toLowerCase().includes(termQuery))
-  res.send(search)
+  const termQuery = req.query.term.toLowerCase();
+  const search = quotes.filter((quote) => quote.quote.toLowerCase().includes(termQuery) || quote.author.toLowerCase().includes(termQuery));
+  res.send(search);
 });
 
 //...END OF YOUR CODE
@@ -39,10 +43,10 @@ app.get('/quotes/search', (req, res) => {
 //example: pickFromArray([1,2,3,4]), or
 //example: pickFromArray(myContactsArray)
 //
-function pickFromArray(arr) {
+/* function pickFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
-
+ */
 //Start our server so that it listens for HTTP requests!
 let port = 5000;
 
